@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="OfflineWinDict.Views.RecentPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:models="using:OfflineWinDict.Models"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Padding="28,22,28,24" RowSpacing="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="Recent searches" Style="{StaticResource PageTitleStyle}" VerticalAlignment="Center"/>
+            <Button x:Name="ClearAllButton" Grid.Column="1" Style="{StaticResource ChipButtonStyle}" Click="ClearAllButton_Click"
+                    AutomationProperties.Name="Clear recent history">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <FontIcon Glyph="&#xE74D;" FontSize="13"/>
+                    <TextBlock Text="Clear all" FontSize="13"/>
+                </StackPanel>
+            </Button>
+        </Grid>
+
+        <Border Grid.Row="1" Style="{StaticResource CardBorderStyle}">
+            <Grid>
+                <ListView x:Name="HistoryList" Padding="12" SelectionMode="None" IsItemClickEnabled="True"
+                          ItemClick="HistoryList_ItemClick" AutomationProperties.Name="Recent searches">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <Setter Property="MinHeight" Value="54"/>
+                            <Setter Property="CornerRadius" Value="10"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="models:HistoryItem">
+                            <Grid ColumnSpacing="10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <FontIcon Grid.Column="0" Glyph="&#xE81C;" FontSize="15" Foreground="{ThemeResource AccentBlueBrush}" VerticalAlignment="Center"/>
+
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="1">
+                                    <TextBlock Text="{x:Bind Word}" FontSize="15" FontWeight="SemiBold" Foreground="{ThemeResource TextPrimaryBrush}"/>
+                                    <TextBlock Foreground="{ThemeResource TextTertiaryBrush}" FontSize="12">
+                                        <Run Text="{x:Bind LanguageCode}"/><Run Text="  ·  "/><Run Text="{x:Bind DisplayTime}"/>
+                                    </TextBlock>
+                                </StackPanel>
+
+                                <Button Grid.Column="2" Style="{StaticResource IconActionButtonStyle}" Width="34" Height="34"
+                                        Click="RemoveItem_Click" Tag="{x:Bind}" AutomationProperties.Name="Remove from history" ToolTipService.ToolTip="Remove">
+                                    <FontIcon Glyph="&#xE74D;" FontSize="13"/>
+                                </Button>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <StackPanel x:Name="HistoryEmptyState" Spacing="12" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20">
+                    <FontIcon Glyph="&#xE81C;" FontSize="42" Foreground="{ThemeResource AccentBlueFaintBrush}" HorizontalAlignment="Center"/>
+                    <TextBlock Text="No recent searches" FontSize="18" FontWeight="SemiBold" Foreground="{ThemeResource TextPrimaryBrush}" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Words you look up are remembered here so you can return to them quickly."
+                               Foreground="{ThemeResource TextSecondaryBrush}" FontSize="13.5" HorizontalAlignment="Center" TextAlignment="Center" MaxWidth="420" TextWrapping="Wrap"/>
+                    <Button Content="Search a word" Style="{StaticResource ChipButtonStyle}" Foreground="{ThemeResource AccentBlueBrush}" HorizontalAlignment="Center" Click="GoSearch_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Page>

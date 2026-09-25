@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="OfflineWinDict.Views.WordOfTheDayPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:OfflineWinDict"
+    xmlns:controls="using:OfflineWinDict.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Padding="28,22,28,24" RowSpacing="18">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="14" VerticalAlignment="Center">
+                <TextBlock Text="Word of the Day" Style="{StaticResource PageTitleStyle}"/>
+                <TextBlock x:Name="DateLabel" VerticalAlignment="Center" Margin="0,5,0,0" Foreground="{ThemeResource TextTertiaryBrush}" FontSize="13.5"/>
+            </StackPanel>
+        </Grid>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel Spacing="18">
+
+                <!-- Today's card -->
+                <Border Style="{StaticResource CardBorderStyle}" Padding="28,26,28,24">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0" Spacing="14" VerticalAlignment="Top">
+                                <StackPanel Orientation="Horizontal" Spacing="14" VerticalAlignment="Center">
+                                    <TextBlock x:Name="WotdWord" Style="{StaticResource WordHeadwordStyle}" FontSize="40" VerticalAlignment="Center"/>
+                                    <Button x:Name="WotdAudioButton" Style="{StaticResource IconActionButtonStyle}" Width="44" Height="44" CornerRadius="10"
+                                            Background="{ThemeResource AccentBlueSoftBrush}" Click="AudioButton_Click"
+                                            AutomationProperties.Name="Play pronunciation" ToolTipService.ToolTip="Play pronunciation">
+                                        <FontIcon Glyph="&#xE767;" FontSize="18" Foreground="{ThemeResource AccentBlueBrush}"/>
+                                    </Button>
+                                    <Button x:Name="WotdFavoriteButton" Style="{StaticResource IconActionButtonStyle}" Width="44" Height="44" CornerRadius="10"
+                                            Click="FavoriteButton_Click" AutomationProperties.Name="Add to favorites" ToolTipService.ToolTip="Add to favorites">
+                                        <FontIcon x:Name="WotdFavoriteIcon" Glyph="&#xE734;" FontSize="17"/>
+                                    </Button>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Spacing="12">
+                                    <TextBlock x:Name="WotdPhonetic" FontSize="17" Foreground="{ThemeResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="WotdPos" FontSize="13.5" FontStyle="Italic" Foreground="{ThemeResource AccentBlueBrush}" VerticalAlignment="Center"/>
+                                </StackPanel>
+
+                                <!-- Definition / loading / offline -->
+                                <StackPanel x:Name="WotdLoading" Spacing="10" Visibility="Collapsed">
+                                    <ProgressRing Width="26" Height="26" IsActive="True" HorizontalAlignment="Left"/>
+                                    <TextBlock Text="Fetching today's definition…" Foreground="{ThemeResource TextSecondaryBrush}" FontSize="13.5"/>
+                                </StackPanel>
+
+                                <StackPanel x:Name="WotdOffline" Spacing="10" Visibility="Collapsed">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <FontIcon Glyph="&#xE704;" FontSize="18" Foreground="{ThemeResource BrandRedBrush}" VerticalAlignment="Center"/>
+                                        <TextBlock Text="Definition unavailable offline" FontWeight="SemiBold" Foreground="{ThemeResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                    <Button Content="Retry" Style="{StaticResource ChipButtonStyle}" Foreground="{ThemeResource AccentBlueBrush}" HorizontalAlignment="Left" Click="Reload_Click"/>
+                                </StackPanel>
+
+                                <StackPanel x:Name="WotdContent" Spacing="12">
+                                    <TextBlock x:Name="WotdDefinition" TextWrapping="Wrap" FontSize="15.5" LineHeight="23" Foreground="{ThemeResource TextPrimaryBrush}"/>
+                                    <Border x:Name="WotdExampleBorder" Background="{ThemeResource SubCardBrush}" BorderBrush="{ThemeResource ExampleBarBrush}"
+                                            BorderThickness="2.5,0,0,0" CornerRadius="4" Padding="12,8,12,8" Margin="0,2,24,0"
+                                            Visibility="Collapsed" HorizontalAlignment="Left">
+                                        <TextBlock x:Name="WotdExample" TextWrapping="Wrap" FontSize="13.5" FontStyle="Italic"
+                                                   Foreground="{ThemeResource TextSecondaryBrush}" MaxWidth="640"/>
+                                    </Border>
+                                    <Button Content="Open full entry" Style="{StaticResource ChipButtonStyle}" Foreground="{ThemeResource AccentBlueBrush}"
+                                            HorizontalAlignment="Left" Margin="0,4,0,0" Click="OpenFull_Click"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <!-- Side brand card -->
+                            <Border Grid.Column="1" Width="210" VerticalAlignment="Stretch" CornerRadius="14" Padding="18"
+                                    Background="{ThemeResource SubCardBrush}" BorderBrush="{ThemeResource DividerBrush}" BorderThickness="1" Margin="24,0,0,0">
+                                <StackPanel Spacing="8" VerticalAlignment="Center">
+                                    <Border Width="64" Height="64" CornerRadius="16" Background="#12294A" HorizontalAlignment="Center">
+                                        <TextBlock Text="O" FontFamily="Georgia" FontSize="34" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                    <TextBlock Text="Learn a word every day" TextWrapping="Wrap" TextAlignment="Center" FontSize="13" Foreground="{ThemeResource TextSecondaryBrush}"/>
+                                    <Path Data="M 0,14 Q 22,-6 44,14" Stroke="{ThemeResource BrandGreenBrush}" StrokeThickness="3" StrokeEndLineCap="Round" Stretch="None" HorizontalAlignment="Center" Margin="0,4,0,0"/>
+                                    <Path Data="M 0,10 Q 22,30 44,10" Stroke="{ThemeResource BrandRedBrush}" StrokeThickness="3" StrokeEndLineCap="Round" Stretch="None" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </Grid>
+                </Border>
+
+                <!-- Archive -->
+                <StackPanel Spacing="10">
+                    <TextBlock Text="Previous days" Style="{StaticResource SectionHeaderStyle}"/>
+                    <TextBlock x:Name="ArchiveEmptyHint" Text="Come back tomorrow — the words you've seen will be remembered here."
+                               Foreground="{ThemeResource TextTertiaryBrush}" FontSize="13" Visibility="Collapsed"/>
+                    <controls:WrapPanel x:Name="ArchivePanel" Spacing="10"/>
+                </StackPanel>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>

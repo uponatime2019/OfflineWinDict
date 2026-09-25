@@ -1,0 +1,65 @@
+# Visual Studio / .NET
+bin/
+obj/
+.vs/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+publish_out/
+
+# NuGet
+*.nupkg
+*.snupkg
+**/packages/*
+*.nuget.props
+*.nuget.targets
+project.lock.json
+
+# MSIX / packaging artifacts
+*.appx
+*.appxbundle
+*.appxupload
+*.msix
+*.msixbundle
+*.msixupload
+AppPackages/
+BundleArtifacts/
+Package.StoreAssociation.xml
+_appx_sign_settings.txt
+*.pfx
+*_StoreKey.pfx
+
+# Release zips
+*.zip
+
+# Windows App SDK / MSBuild generated
+*.g.cs
+*.g.i.cs
+*.xaml.rs
+Generated\ Files/
+*.projitems
+*.knownstate
+
+# Rider / VS Code
+.idea/
+*.swp
+
+# OS junk
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="OfflineWinDict.Views.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <ScrollViewer Padding="28,22,28,24" VerticalScrollBarVisibility="Auto">
+        <StackPanel Spacing="16" MaxWidth="860" HorizontalAlignment="Left">
+
+            <TextBlock Text="Settings" Style="{StaticResource PageTitleStyle}"/>
+
+            <!-- Appearance -->
+            <Border Style="{StaticResource CardBorderStyle}" Padding="24,18,24,20">
+                <StackPanel Spacing="14">
+                    <TextBlock Text="Appearance" Style="{StaticResource SectionHeaderStyle}"/>
+                    <RadioButtons x:Name="ThemeSelector" Header="App theme" MaxColumns="3"
+                                  AutomationProperties.Name="App theme"
+                                  SelectionChanged="ThemeSelector_SelectionChanged">
+                        <x:String>Light</x:String>
+                        <x:String>Dark</x:String>
+                        <x:String>System</x:String>
+                    </RadioButtons>
+                </StackPanel>
+            </Border>
+
+            <!-- Dictionary -->
+            <Border Style="{StaticResource CardBorderStyle}" Padding="24,18,24,20">
+                <StackPanel Spacing="14">
+                    <TextBlock Text="Dictionary" Style="{StaticResource SectionHeaderStyle}"/>
+                    <ComboBox x:Name="DefaultDictionaryCombo" Header="Default dictionary language" MinWidth="280"
+                              AutomationProperties.Name="Default dictionary language"
+                              SelectionChanged="DefaultDictionaryCombo_SelectionChanged"/>
+                    <ToggleSwitch x:Name="AutoPlayToggle" Header="Play pronunciation automatically"
+                                  OnContent="On" OffContent="Off"
+                                  AutomationProperties.Name="Play pronunciation automatically"
+                                  Toggled="AutoPlayToggle_Toggled"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Pronunciation -->
+            <Border Style="{StaticResource CardBorderStyle}" Padding="24,18,24,20">
+                <StackPanel Spacing="14">
+                    <TextBlock Text="Pronunciation" Style="{StaticResource SectionHeaderStyle}"/>
+                    <TextBlock Text="Recorded audio is used when the dictionary provides it; Windows voices can speak any word in any language."
+                               TextWrapping="Wrap" Foreground="{ThemeResource TextSecondaryBrush}" FontSize="13"/>
+                    <ToggleSwitch x:Name="PreferTtsToggle" Header="Prefer Windows voices over recorded audio"
+                                  OnContent="Voices" OffContent="Recorded audio"
+                                  AutomationProperties.Name="Prefer Windows voices"
+                                  Toggled="PreferTtsToggle_Toggled"/>
+                    <StackPanel Spacing="8">
+                        <ComboBox x:Name="VoiceCombo" Header="Windows voice" MinWidth="320" PlaceholderText="Default voice for each language"
+                                  AutomationProperties.Name="Windows voice"
+                                  SelectionChanged="VoiceCombo_SelectionChanged"/>
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <Button x:Name="TestVoiceButton" Content="Test voice" Style="{StaticResource ChipButtonStyle}"
+                                    Foreground="{ThemeResource AccentBlueBrush}" Click="TestVoice_Click"
+                                    AutomationProperties.Name="Test voice"/>
+                            <TextBlock x:Name="VoiceHint" Text="" VerticalAlignment="Center" Foreground="{ThemeResource TextTertiaryBrush}" FontSize="12"/>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Data -->
+            <Border Style="{StaticResource CardBorderStyle}" Padding="24,18,24,20">
+                <StackPanel Spacing="14">
+                    <TextBlock Text="Your data" Style="{StaticResource SectionHeaderStyle}"/>
+                    <TextBlock Text="Favorites, folders and search history are stored locally on this device."
+                               Foreground="{ThemeResource TextSecondaryBrush}" FontSize="13"/>
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <Button x:Name="ClearHistoryButton" Content="Clear recent searches" Style="{StaticResource ChipButtonStyle}"
+                                Click="ClearHistoryButton_Click" AutomationProperties.Name="Clear recent searches"/>
+                        <Button x:Name="ClearFavoritesButton" Content="Clear all favorites" Style="{StaticResource ChipButtonStyle}"
+                                Foreground="{ThemeResource BrandRedBrush}"
+                                Click="ClearFavoritesButton_Click" AutomationProperties.Name="Clear all favorites"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Offline Database -->
+            <Border Style="{StaticResource CardBorderStyle}" Padding="24,18,24,20">
+                <StackPanel Spacing="10">
+                    <TextBlock Text="Offline database" Style="{StaticResource SectionHeaderStyle}"/>
+                    <TextBlock x:Name="OfflineStatusLabel" Text="Checking offline database..."
+                               Foreground="{ThemeResource TextSecondaryBrush}" FontSize="13"/>
+                    <TextBlock x:Name="OfflinePathLabel" Text=""
+                               TextWrapping="Wrap" Foreground="{ThemeResource TextTertiaryBrush}" FontSize="12"/>
+                </StackPanel>
+            </Border>
+
+            <!-- About -->
+            <Border Style="{StaticResource CardBorderStyle}" Padding="24,18,24,20">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="About" Style="{StaticResource SectionHeaderStyle}"/>
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <Border Width="46" Height="46" CornerRadius="11">
+                            <Border.Background>
+                                <ImageBrush ImageSource="ms-appx:///Assets/Square44x44Logo.scale-200.png"/>
+                            </Border.Background>
+                        </Border>
+                        <StackPanel Spacing="2" VerticalAlignment="Center">
+                            <TextBlock Text="OfflineWinDict" FontSize="16" FontWeight="SemiBold" Foreground="{ThemeResource TextPrimaryBrush}"/>
+                            <TextBlock x:Name="VersionLabel" Text="Version 1.0.0.0" FontSize="12.5" Foreground="{ThemeResource TextTertiaryBrush}"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <TextBlock Text="Dictionary data comes from freely-licensed sources and is fetched live:"
+                               Foreground="{ThemeResource TextSecondaryBrush}" FontSize="13"/>
+                    <StackPanel Spacing="6" Margin="4,0,0,0">
+                        <HyperlinkButton Content="Free Dictionary API — English entries, audio (CC BY-SA)" NavigateUri="https://dictionaryapi.dev" FontSize="12.5" Padding="0"/>
+                        <HyperlinkButton Content="Datamuse — suggestions, thesaurus, topics" NavigateUri="https://www.datamuse.com/api/" FontSize="12.5" Padding="0"/>
+                        <HyperlinkButton Content="Wiktionary — multilingual definitions (CC BY-SA 4.0)" NavigateUri="https://en.wiktionary.org" FontSize="12.5" Padding="0"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</Page>

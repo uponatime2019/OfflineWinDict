@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="OfflineWinDict.Views.TopicsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:models="using:OfflineWinDict.Models"
+    xmlns:controls="using:OfflineWinDict.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Padding="28,22,28,24" RowSpacing="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Spacing="4">
+            <TextBlock Text="Topics" Style="{StaticResource PageTitleStyle}"/>
+            <TextBlock Text="Specialized glossaries — words are fetched live for each topic."
+                       Foreground="{ThemeResource TextSecondaryBrush}" FontSize="13.5"/>
+        </StackPanel>
+
+        <Grid Grid.Row="1" ColumnSpacing="16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="280"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Topic list -->
+            <Border Grid.Column="0" Style="{StaticResource CardBorderStyle}" Padding="10">
+                <ListView x:Name="TopicList" SelectionMode="Single" IsItemClickEnabled="True"
+                          ItemClick="TopicList_ItemClick" AutomationProperties.Name="Topic list">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <Setter Property="MinHeight" Value="52"/>
+                            <Setter Property="CornerRadius" Value="10"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="models:TopicDef">
+                            <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+                                <Border Width="34" Height="34" CornerRadius="9" Background="{ThemeResource AccentBlueSoftBrush}" VerticalAlignment="Center">
+                                    <TextBlock Text="{x:Bind Glyph}" FontFamily="Segoe Fluent Icons,Segoe MDL2 Assets" FontSize="15"
+                                               Foreground="{ThemeResource AccentBlueBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <StackPanel Spacing="1" VerticalAlignment="Center">
+                                    <TextBlock Text="{x:Bind Title}" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextPrimaryBrush}"/>
+                                    <TextBlock Text="{x:Bind Description}" FontSize="11.5" Foreground="{ThemeResource TextTertiaryBrush}" TextTrimming="CharacterEllipsis" MaxWidth="190"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Border>
+
+            <!-- Topic words -->
+            <Border Grid.Column="1" Style="{StaticResource CardBorderStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="12" Padding="20,14,20,10">
+                        <TextBlock x:Name="TopicHeader" Text="Pick a topic" Style="{StaticResource SectionHeaderStyle}" VerticalAlignment="Center"/>
+                        <ProgressRing x:Name="TopicSpinner" Width="18" Height="18" IsActive="False" Visibility="Collapsed" VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <ScrollViewer Grid.Row="1" Padding="16,4,16,16" VerticalScrollBarVisibility="Auto">
+                        <StackPanel Spacing="6">
+                            <!-- Placeholder -->
+                            <StackPanel x:Name="TopicPlaceholder" Spacing="10" Margin="4,16,4,4">
+                                <FontIcon Glyph="&#xE8F1;" FontSize="34" Foreground="{ThemeResource AccentBlueFaintBrush}"/>
+                                <TextBlock Text="Choose a topic to browse its vocabulary" FontSize="15" FontWeight="SemiBold" Foreground="{ThemeResource TextPrimaryBrush}"/>
+                                <TextBlock Text="Every word links to the full dictionary entry." Foreground="{ThemeResource TextSecondaryBrush}" FontSize="13"/>
+                            </StackPanel>
+
+                            <!-- Loading -->
+                            <StackPanel x:Name="TopicLoading" Spacing="12" Visibility="Collapsed" Margin="4,18,4,4">
+                                <ProgressRing Width="26" Height="26" IsActive="True" HorizontalAlignment="Left"/>
+                                <TextBlock Text="Collecting topic words…" Foreground="{ThemeResource TextSecondaryBrush}" FontSize="13.5"/>
+                            </StackPanel>
+
+                            <!-- Offline -->
+                            <StackPanel x:Name="TopicError" Spacing="10" Visibility="Collapsed" Margin="4,14,4,4">
+                                <FontIcon Glyph="&#xE704;" FontSize="30" Foreground="{ThemeResource BrandRedBrush}"/>
+                                <TextBlock x:Name="TopicErrorText" Text="Topic words could not be loaded. You may be offline." TextWrapping="Wrap" FontWeight="SemiBold" Foreground="{ThemeResource TextPrimaryBrush}"/>
+                                <Button Content="Retry" Style="{StaticResource ChipButtonStyle}" Foreground="{ThemeResource AccentBlueBrush}" Click="RetryTopic_Click"/>
+                            </StackPanel>
+
+                            <!-- Empty -->
+                            <StackPanel x:Name="TopicEmpty" Spacing="8" Visibility="Collapsed" Margin="4,14,4,4">
+                                <FontIcon Glyph="&#xE7BA;" FontSize="30" Foreground="{ThemeResource TextTertiaryBrush}"/>
+                                <TextBlock Text="No words found for this topic right now." Foreground="{ThemeResource TextSecondaryBrush}" FontSize="13.5"/>
+                            </StackPanel>
+
+                            <StackPanel x:Name="TopicWordsHost" Spacing="6" Visibility="Collapsed"/>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</Page>

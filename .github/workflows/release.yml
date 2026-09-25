@@ -1,0 +1,41 @@
+name: Release
+
+# Creates a GitHub Release with a portable, self-contained zip
+# (all offline dictionaries bundled) whenever a v* tag is pushed (e.g. v1.0.0).
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Publish (self-contained x64)
+        run: dotnet publish OfflineWinDict.csproj -c Release -p:Platform=x64 -o publish_out
+
+      - name: Zip portable build
+        shell: pwsh
+        run: |
+          if (-not (Test-Path 'publish_out/resources.pri')) { throw 'App PRI (resources.pri) missing from publish output' }
+          if (-not (Test-Path 'publish_out/Assets/Data/Dictionary.db')) { throw 'Offline dictionaries missing from publish output' }
+          Compress-Archive -Path "publish_out/*" -DestinationPath "OfflineWinDict-${{ github.ref_name }}-win-x64.zip"
+          Get-Item "OfflineWinDict-${{ github.ref_name }}-win-x64.zip" | Select-Object Name, @{n='SizeMB';e={[math]::Round($_.Length/1MB)}}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: OfflineWinDict-*.zip
+          generate_release_notes: true
+          overwrite: true

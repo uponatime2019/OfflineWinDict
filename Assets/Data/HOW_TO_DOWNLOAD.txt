@@ -1,0 +1,51 @@
+# Offline Dictionary Database Download Instructions
+
+To enable full offline dictionary lookups in multiple languages without requiring internet connectivity:
+
+## 1. Available Language Databases
+The application supports localized offline SQLite dictionary databases in `Assets/Data/`:
+
+| Language | Filename | Source / Format |
+|----------|----------|-----------------|
+| English (`en`) | `Dictionary.db` | English Dictionary SQLite (Public Domain / CC BY-SA) |
+| Spanish (`es`) | `Dictionary_es.db` | WikDict / Wiktionary (CC BY-SA) |
+| French (`fr`) | `Dictionary_fr.db` | WikDict / Wiktionary (CC BY-SA) |
+| German (`de`) | `Dictionary_de.db` | WikDict / Wiktionary (CC BY-SA) |
+| Italian (`it`) | `Dictionary_it.db` | WikDict / Wiktionary (CC BY-SA) |
+| Portuguese (`pt`) | `Dictionary_pt.db` | WikDict / Wiktionary (CC BY-SA) |
+| Russian (`ru`) | `Dictionary_ru.db` | WikDict / Wiktionary (CC BY-SA) |
+| Dutch (`nl`) | `Dictionary_nl.db` | WikDict / Wiktionary (CC BY-SA) |
+| Chinese (`zh`) | `Dictionary_zh.db` | WikDict / Wiktionary (CC BY-SA) |
+| Japanese (`ja`) | `Dictionary_ja.db` | WikDict / Wiktionary (CC BY-SA) |
+
+## 2. Downloading English Database (Dictionary.db)
+URL:
+https://raw.githubusercontent.com/AyeshJayasekara/English-Dictionary-SQLite/master/Dictionary.db
+
+PowerShell command:
+```powershell
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/AyeshJayasekara/English-Dictionary-SQLite/master/Dictionary.db" -OutFile "Assets\Data\Dictionary.db"
+```
+
+## 3. Downloading Additional Languages
+Multilingual SQLite dictionaries can be downloaded directly from WikDict:
+Base URL: `https://download.wikdict.com/dictionaries/sqlite/2/`
+
+Files:
+- Spanish: `es-en.sqlite3`
+- French: `fr-en.sqlite3`
+- German: `de-en.sqlite3`
+- Italian: `it-en.sqlite3`
+- Portuguese: `pt-en.sqlite3`
+- Russian: `ru-en.sqlite3`
+- Dutch: `nl-en.sqlite3`
+- Chinese: `zh-en.sqlite3`
+- Japanese: `ja-en.sqlite3`
+
+Convert/rename with table `entries(word, wordtype, definition)` into `Dictionary_{lang}.db`.
+
+## 4. File Location
+Place `Dictionary.db` or `Dictionary_{lang}.db` directly into:
+`<AppRoot>\Assets\Data\`
+
+The app will automatically detect installed languages at startup and prioritize offline lookups and instant suggestions.
